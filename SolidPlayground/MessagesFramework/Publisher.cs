@@ -13,7 +13,6 @@
 
         public Task Send(string message)
         {
-            Console.WriteLine($"Sent message: {message}");
             return Task.CompletedTask;
         }
 
