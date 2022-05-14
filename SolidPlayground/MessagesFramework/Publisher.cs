@@ -2,13 +2,13 @@
 {
     public class Publisher<T> : IPublisher<T>
     {
-        Subscription Subscription;
+        Subscription subscriptionObject;
 
         public Publisher(
             Subscription subscription
         )
         {
-            Subscription = subscription;
+            subscriptionObject = subscription;
         }
 
         public Task Send(string message)

@@ -5,13 +5,13 @@ namespace Infrastructure.Logging
 {
     public class LogServiceFactory
     {
-        private static Serilog.Core.Logger? InnerSerilogLogger;
+        private static Serilog.Core.Logger? innerSerilogLogger;
 
         public LogServiceFactory()
         {
-            if (InnerSerilogLogger is null)
+            if (innerSerilogLogger is null)
             {
-                InnerSerilogLogger = new LoggerConfiguration()
+                innerSerilogLogger = new LoggerConfiguration()
                     .WriteTo.Console()
                     .CreateLogger();
             }
@@ -19,7 +19,7 @@ namespace Infrastructure.Logging
 
         public Microsoft.Extensions.Logging.ILogger CreateLogger<T>()
         {
-            return new SerilogLoggerFactory(InnerSerilogLogger).CreateLogger<T>();
+            return new SerilogLoggerFactory(innerSerilogLogger).CreateLogger<T>();
         }
     }
 }
