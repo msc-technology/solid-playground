@@ -16,7 +16,14 @@ namespace Infrastructure.Storage
             var path = Environment.GetFolderPath(folder);
             DbPath = System.IO.Path.Join(path, "app.db");
 
-            Database.EnsureCreated();
+            try
+            {
+                Database.EnsureCreated();
+            }
+            catch(Microsoft.Data.Sqlite.SqliteException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         // The following configures EF to create a Sqlite database file in the
