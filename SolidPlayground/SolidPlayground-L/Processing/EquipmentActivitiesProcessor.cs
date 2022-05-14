@@ -1,11 +1,11 @@
 ﻿using Core.DTO;
 using MessagesFramework;
 using Microsoft.Extensions.Logging;
-using SolidPlayground_L.Storage;
-using SolidPlaygroundCore.Infrastructure;
-using SolidPlaygroundCore.Storage;
-using SolidPlaygroundCore.Storage.Entities;
+using SolidPlayground_L.Repository;
+using Infrastructure.Storage;
+using Infrastructure.Storage.Entities;
 using System.Text.Json;
+using Infrastructure.Logging;
 
 namespace SolidPlayground_L.Processing
 {
@@ -13,32 +13,31 @@ namespace SolidPlayground_L.Processing
     {
         // Violates:
         // D: Dipendency Inversion
-        private readonly Publisher<EquipmentActivity> Publisher;
-        private readonly ILogger Logger;
-        private readonly BookingEventReadonlyRepository BookingEventRepository;
+        private readonly Publisher<EquipmentActivity> publisher;
+        private readonly ILogger logger;
+        private readonly BookingEventReadonlyRepository bookingEventRepository;
 
         public EquipmentActivitiesProcessor()
         {
-            var loggerFactory = new LoggerFactory();
-            Logger = loggerFactory.CreateLogger<EquipmentActivitiesProcessor>();
             var publisherConnString = Environment.GetEnvironmentVariable("pub-connection-string") ?? "local-dev-string";
-            Publisher = new Publisher<EquipmentActivity>(new Subscription(publisherConnString));
-            Logger = new LogServiceFactory().CreateLogger<EquipmentActivitiesProcessor>();
-            BookingEventRepository = new BookingEventReadonlyRepository();
+            var loggerFactory = new LogServiceFactory();
+            logger = loggerFactory.CreateLogger<EquipmentActivitiesProcessor>();
+            publisher = new Publisher<EquipmentActivity>(new Subscription(publisherConnString));
+            bookingEventRepository = new BookingEventReadonlyRepository();
         }
 
         public async Task HandleMessage(Message message)
         {
             if (message == null)
             {
-                Logger.LogError("Invalid message received");
+                logger.LogError("Invalid message received");
                 return;
             }
 
             string body = message.Body;
             if (string.IsNullOrEmpty(body))
             {
-                Logger.LogError("Invalid message received");
+                logger.LogError("Invalid message received");
                 return;
             }
 
@@ -50,28 +49,28 @@ namespace SolidPlayground_L.Processing
                 {
                     if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))
                     {
-                        var isBookingFound = await BookingEventRepository.Exists(equipment.BookingNumber);
-                        Logger.LogInformation("Booking: {@BookingNumber} in equipment message {@Found}", equipment.BookingNumber,(equipment.BookingNumber is null ? "not found" : "exists"));
+                        var isBookingFound = await bookingEventRepository.Exists(equipment.BookingNumber);
+                        logger.LogInformation("Booking: {@BookingNumber} in equipment message {@Found}", equipment.BookingNumber,(equipment.BookingNumber is null ? "not found" : "exists"));
                         if (isBookingFound)
                         {
-                            await Publisher.Send(equipment);
-                            Logger.LogInformation("Equipment activity {@ActivityId} published", equipment.ActivityId);
+                            await publisher.Send(equipment);
+                            logger.LogInformation("Equipment activity {@ActivityId} published", equipment.ActivityId);
                         }
                         else
                         {
                             if (await StoreEquipment(equipment))
                             {
-                                Logger.LogInformation("Stored equipment activity: {@message} with booking number not found", equipment);
+                                logger.LogInformation("Stored equipment activity: {@message} with booking number not found", equipment);
                             }
                             else
                             {
-                                Logger.LogError("Error while storing equipment activity");
+                                logger.LogError("Error while storing equipment activity");
                             }
                         }
                     }
                     else
                     {
-                        Logger.LogError("Equipment activity {@ActivityId} with missing booking number", equipment.ActivityId);
+                        logger.LogError("Equipment activity {@ActivityId} with missing booking number", equipment.ActivityId);
                     }
                 }
             }
@@ -83,7 +82,7 @@ namespace SolidPlayground_L.Processing
             // error
             else
             {
-                Logger.LogError("Aborting processing for booking");
+                logger.LogError("Aborting processing for booking");
             }
         }
 

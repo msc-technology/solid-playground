@@ -1,8 +1,8 @@
 ﻿using MessagesFramework;
 using Core.DTO;
-using SolidPlayground_S.Storage;
+using SolidPlayground_S.Repository;
 using System.Text.Json;
-using SolidPlaygroundCore.Infrastructure;
+using Infrastructure.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace SolidPlayground_S.Processing
@@ -12,17 +12,17 @@ namespace SolidPlayground_S.Processing
         // Violates:
         // O: Open for change, closed to modification
         // D: Dipendency Inversion
-        private readonly Publisher<EquipmentActivity> Publisher;
-        private readonly ILogger Logger;
-        private readonly BookingEventRepository bookingEventStorage;
+        private readonly Publisher<EquipmentActivity> publisher;
+        private readonly ILogger logger;
+        private readonly BookingEventRepository bookingEventRepository;
         private readonly EquipmentActivityEventRepository equipmentActivityEventStorage;
 
         public MessageProcessor()
         {
             var publisherConnString = Environment.GetEnvironmentVariable("pub-connection-string") ?? "local-dev-string";
-            Publisher = new Publisher<EquipmentActivity>(new Subscription(publisherConnString));
-            Logger = new LogServiceFactory().CreateLogger<MessageProcessor>();
-            bookingEventStorage = new BookingEventRepository();
+            publisher = new Publisher<EquipmentActivity>(new Subscription(publisherConnString));
+            logger = new LogServiceFactory().CreateLogger<MessageProcessor>();
+            bookingEventRepository = new BookingEventRepository();
             equipmentActivityEventStorage = new EquipmentActivityEventRepository();
         }
 
@@ -30,7 +30,7 @@ namespace SolidPlayground_S.Processing
         {
             if (message == null || string.IsNullOrEmpty(message.Body))
             {
-                Logger.LogError("Invalid message received");
+                logger.LogError("Invalid message received");
                 return;
             }
 
@@ -44,21 +44,21 @@ namespace SolidPlayground_S.Processing
                 {
                     if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))
                     {
-                        var isBookingFound = await bookingEventStorage.Exists(equipment.BookingNumber);
+                        var isBookingFound = await bookingEventRepository.Exists(equipment.BookingNumber);
                         if (isBookingFound)
                         {
-                            await Publisher.Send(equipment);
-                            Logger.LogInformation("Equipment activity {@ActivityId} published", equipment.ActivityId);
+                            await publisher.Send(equipment);
+                            logger.LogInformation("Equipment activity {@ActivityId} published", equipment.ActivityId);
                         }
                         else
                         {
                             await equipmentActivityEventStorage.Store(equipment);
-                            Logger.LogError("Equipment activity {@ActivityId} with booking number {@BookingNumber} not found", equipment.ActivityId, equipment.BookingNumber);
+                            logger.LogError("Equipment activity {@ActivityId} with booking number {@BookingNumber} not found", equipment.ActivityId, equipment.BookingNumber);
                         }
                     }
                     else
                     {
-                        Logger.LogError("Equipment activity {@ActivityId} with missing booking number", equipment.ActivityId);
+                        logger.LogError("Equipment activity {@ActivityId} with missing booking number", equipment.ActivityId);
                     }
                 }
             }
@@ -68,17 +68,24 @@ namespace SolidPlayground_S.Processing
                 Booking booking = JsonSerializer.Deserialize<Booking>(body);
                 if (booking is not null)
                 {
-                    await bookingEventStorage.Store(booking);
+                    if (!await bookingEventRepository.Store(booking))
+                    {
+                        logger.LogInformation("Booking {@BookingNumber} was already stored", booking.BookingNumber);
+                    }
+                    else
+                    {
+                        logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
+                    }
                 }
                 else
                 {
-                    Logger.LogError("Invalid booking received");
+                    logger.LogError("Invalid booking received");
                 }
             }
             // error
             else
             {
-                Logger.LogError("Aborting processing for booking");
+                logger.LogError("Aborting processing for booking");
             }
         }
     }

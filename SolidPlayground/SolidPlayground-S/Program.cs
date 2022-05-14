@@ -3,7 +3,7 @@ using MessagesFramework;
 using SolidPlayground_S.Processing;
 
 // See https://aka.ms/new-console-template for more information
-var loggerFactory = new SolidPlaygroundCore.Infrastructure.LogServiceFactory();
+var loggerFactory = new Infrastructure.Logging.LogServiceFactory();
 var logger = loggerFactory.CreateLogger<Program>();
 Console.WriteLine("Starting message processor");
 

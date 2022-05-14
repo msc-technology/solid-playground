@@ -1,14 +1,14 @@
 ﻿using Core.DTO;
-using SolidPlaygroundCore.Storage;
-using SolidPlaygroundCore.Storage.Entities;
+using Infrastructure.Storage;
+using Infrastructure.Storage.Entities;
 
-namespace SolidPlayground_S.Storage
+namespace SolidPlayground_S.Repository
 {
     // Violates:
     // I: Interface segregation
     public class EquipmentActivityEventRepository : IRepository<EquipmentActivity?>
     {
-        public async Task<bool> Exists(string key)
+        public Task<bool> Exists(string key)
         {
             throw new NotImplementedException();
         }

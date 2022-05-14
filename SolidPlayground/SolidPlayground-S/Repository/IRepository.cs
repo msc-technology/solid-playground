@@ -1,4 +1,4 @@
-﻿namespace SolidPlayground_S.Storage
+﻿namespace SolidPlayground_S.Repository
 {
     public interface IRepository<T>
     {

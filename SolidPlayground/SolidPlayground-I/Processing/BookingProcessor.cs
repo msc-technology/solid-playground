@@ -1,23 +1,24 @@
 ﻿using Core.DTO;
 using MessagesFramework;
 using Microsoft.Extensions.Logging;
-using Infrastructure.Storage;
-using Infrastructure.Storage.Entities;
-using System.Text.Json;
+using SolidPlayground_I.Repository;
 using Infrastructure.Logging;
+using System.Text.Json;
 
-namespace SolidPlayground_O.Processing
+namespace SolidPlayground_I.Processing
 {
     public class BookingProcessor : IMessageHandler
     {
         // Violates:
         // D: Dipendency Inversion
         private readonly ILogger logger;
+        private readonly BookingEventRepository BookingEventRepository;
 
         public BookingProcessor()
         {
             var loggerFactory = new LogServiceFactory();
             logger = loggerFactory.CreateLogger<BookingProcessor>();
+            BookingEventRepository = new BookingEventRepository();
         }
 
         public async Task HandleMessage(Message message)
@@ -29,11 +30,11 @@ namespace SolidPlayground_O.Processing
             }
 
             string body = message.Body;
-           
+
             Booking booking = JsonSerializer.Deserialize<Booking>(body);
             if (booking is not null)
             {
-                if (!await StoreBooking(booking))
+                if (!await BookingEventRepository.StoreIfNotExists(booking))
                 {
                     logger.LogInformation("Booking {@BookingNumber} was already stored", booking.BookingNumber);
                 }
@@ -45,33 +46,6 @@ namespace SolidPlayground_O.Processing
             else
             {
                 logger.LogError("Invalid booking received");
-            }
-        }
-
-        private async Task<bool> StoreBooking(Booking message)
-        {
-            using (var db = new StorageContext())
-            {
-                var isBookingStored = await BookingExists(message.BookingNumber);
-                if (isBookingStored)
-                {
-                    return false;
-                }
-                else
-                {
-                    await db.BookingEntity.AddAsync(new BookingEntity(message.BookingNumber));
-                    db.SaveChanges();
-                    return true;
-                }
-            }
-        }
-
-        private async Task<bool> BookingExists(string bookingNumber)
-        {
-            using (var db = new StorageContext())
-            {
-                var booking = await db.BookingEntity.FindAsync(bookingNumber);
-                return booking is not null;
             }
         }
     }

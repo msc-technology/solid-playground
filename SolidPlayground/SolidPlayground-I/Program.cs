@@ -1,6 +1,6 @@
 ﻿using Core.DTO;
 using MessagesFramework;
-using SolidPlayground_O.Processing;
+using SolidPlayground_I.Processing;
 
 // See https://aka.ms/new-console-template for more information
 var loggerFactory = new Infrastructure.Logging.LogServiceFactory();

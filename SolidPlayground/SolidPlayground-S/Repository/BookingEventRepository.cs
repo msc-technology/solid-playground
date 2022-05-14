@@ -1,8 +1,8 @@
 ﻿using Core.DTO;
-using SolidPlaygroundCore.Storage;
-using SolidPlaygroundCore.Storage.Entities;
+using Infrastructure.Storage;
+using Infrastructure.Storage.Entities;
 
-namespace SolidPlayground_S.Storage
+namespace SolidPlayground_S.Repository
 {
     // Violates:
     // I: Interface segregation
@@ -17,7 +17,7 @@ namespace SolidPlayground_S.Storage
             }
         }
 
-        public async Task<Booking?> Find(string key)
+        public Task<Booking?> Find(string key)
         {
             throw new NotImplementedException();
         }

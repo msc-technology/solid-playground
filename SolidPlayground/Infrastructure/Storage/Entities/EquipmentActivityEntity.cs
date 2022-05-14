@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SolidPlaygroundCore.Storage.Entities
+namespace Infrastructure.Storage.Entities
 {
     public class EquipmentActivityEntity
     {

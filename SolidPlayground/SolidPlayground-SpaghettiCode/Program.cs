@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using SolidPlayground_SpaghettiCode.Processing;
 
 // See https://aka.ms/new-console-template for more information
-var loggerFactory = new SolidPlaygroundCore.Infrastructure.LogServiceFactory();
+var loggerFactory = new Infrastructure.Logging.LogServiceFactory();
 var logger = loggerFactory.CreateLogger<Program>();
 logger.LogInformation("Starting message processor");
 

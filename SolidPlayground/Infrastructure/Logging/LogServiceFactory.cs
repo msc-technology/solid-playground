@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Extensions.Logging;
-namespace SolidPlaygroundCore.Infrastructure
+namespace Infrastructure.Logging
 {
     public class LogServiceFactory
     {

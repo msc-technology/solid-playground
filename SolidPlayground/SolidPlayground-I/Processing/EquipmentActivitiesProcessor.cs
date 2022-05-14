@@ -1,12 +1,13 @@
 ﻿using Core.DTO;
 using MessagesFramework;
 using Microsoft.Extensions.Logging;
+using SolidPlayground_I.Repository;
 using Infrastructure.Logging;
 using Infrastructure.Storage;
 using Infrastructure.Storage.Entities;
 using System.Text.Json;
 
-namespace SolidPlayground_O.Processing
+namespace SolidPlayground_I.Processing
 {
     public class EquipmentActivitiesProcessor : IMessageHandler
     {
@@ -14,13 +15,15 @@ namespace SolidPlayground_O.Processing
         // D: Dipendency Inversion
         private readonly Publisher<EquipmentActivity> publisher;
         private readonly ILogger logger;
+        private readonly BookingEventReadonlyRepository BookingEventRepository;
 
         public EquipmentActivitiesProcessor()
         {
-            var loggerFactory = new LogServiceFactory();
-            logger = loggerFactory.CreateLogger<EquipmentActivitiesProcessor>();
             var publisherConnString = Environment.GetEnvironmentVariable("pub-connection-string") ?? "local-dev-string";
             publisher = new Publisher<EquipmentActivity>(new Subscription(publisherConnString));
+            var loggerFactory = new LogServiceFactory();
+            logger = loggerFactory.CreateLogger<EquipmentActivitiesProcessor>();
+            BookingEventRepository = new BookingEventReadonlyRepository();
         }
 
         public async Task HandleMessage(Message message)
@@ -46,7 +49,7 @@ namespace SolidPlayground_O.Processing
                 {
                     if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))
                     {
-                        var isBookingFound = await BookingExists(equipment.BookingNumber);
+                        var isBookingFound = await BookingEventRepository.Exists(equipment.BookingNumber);
                         logger.LogInformation("Booking: {@BookingNumber} in equipment message {@Found}", equipment.BookingNumber,(equipment.BookingNumber is null ? "not found" : "exists"));
                         if (isBookingFound)
                         {
@@ -84,15 +87,6 @@ namespace SolidPlayground_O.Processing
         }
 
         // db methods
-        private async Task<bool> BookingExists(string bookingNumber)
-        {
-            using (var db = new StorageContext())
-            {
-                var booking = await db.BookingEntity.FindAsync(bookingNumber);
-                return booking is not null;
-            }
-        }
-
         private async Task<bool> StoreEquipment(EquipmentActivity message)
         {
             if (message is null)

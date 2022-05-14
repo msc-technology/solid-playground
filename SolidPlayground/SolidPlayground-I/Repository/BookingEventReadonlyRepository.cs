@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Storage;
 
-namespace SolidPlayground_L.Repository
+namespace SolidPlayground_I.Repository
 {
     public class BookingEventReadonlyRepository
     {
