@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SolidPlayground.Storage.Entities
+namespace SolidPlaygroundCore.Storage.Entities
 {
     public class BookingEntity
     {

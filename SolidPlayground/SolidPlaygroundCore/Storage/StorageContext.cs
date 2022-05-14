@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SolidPlayground.Storage.Entities;
+using SolidPlaygroundCore.Storage.Entities;
 
-namespace SolidPlayground.Storage
+namespace SolidPlaygroundCore.Storage
 {
     public class StorageContext : DbContext
     {
