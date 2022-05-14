@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SolidPlayground.Storage.Entities;
+using Infrastructure.Storage.Entities;
 
-namespace SolidPlayground.Storage
+namespace Infrastructure.Storage
 {
     public class StorageContext : DbContext
     {
@@ -16,7 +16,14 @@ namespace SolidPlayground.Storage
             var path = Environment.GetFolderPath(folder);
             DbPath = System.IO.Path.Join(path, "app.db");
 
-            Database.EnsureCreated();
+            try
+            {
+                Database.EnsureCreated();
+            }
+            catch(Microsoft.Data.Sqlite.SqliteException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         // The following configures EF to create a Sqlite database file in the
@@ -30,7 +37,7 @@ namespace SolidPlayground.Storage
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BookingEntity>().ToTable("BookingEntity");
-            modelBuilder.Entity<EquipmentActivityEntity>().ToTable("EquipmentActivity");
+            modelBuilder.Entity<EquipmentActivityEntity>().ToTable("EquipmentActivity").HasKey(e => e.Id);
         }
     }
 }

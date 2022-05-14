@@ -4,18 +4,18 @@ namespace MessagesFramework
 {
     public class Subscriber<T>
     {
-        private readonly IMessageGenerator Generator;
+        private readonly IMessageGenerator generator;
         private readonly Timer timer;
-        private readonly IMessageHandler Handler;
+        private readonly IMessageHandler messageHandler;
 
         public Subscriber(
             Subscription subscription,
             IMessageHandler handler
         )
         {
-            Handler = handler ?? throw new ArgumentNullException(nameof(handler));
-            Generator = new MessageGenerator<T>();
-            timer = new Timer(new TimerCallback(SendMessage), () => Generator.Generate(), new TimeSpan(1000), new TimeSpan(800));
+            messageHandler = handler ?? throw new ArgumentNullException(nameof(handler));
+            generator = new MessageGenerator<T>();
+            timer = new Timer(new TimerCallback(SendMessage), () => generator.Generate(), new TimeSpan(1000), new TimeSpan(800));
         }
 
         public void Subscribe()
@@ -29,7 +29,7 @@ namespace MessagesFramework
         {
             var func = (Func<Message>)obj;
             Message message = func.Invoke();
-            await Handler.HandleMessage(message);
+            await messageHandler.HandleMessage(message);
         }
     }
 }

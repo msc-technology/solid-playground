@@ -5,24 +5,22 @@ namespace MessagesFramework.MessageGenerators
 {
     internal class MessageGenerator<T> : IMessageGenerator
     {
-        private readonly Fixture Fixture;
+        private readonly Fixture fixture;
 
         public MessageGenerator()
         {
-            var range = Range.EndAt(99999999);
-            
-            Fixture = new Fixture();
-            Fixture.Customizations.Add(
+            fixture = new Fixture();
+            fixture.Customizations.Add(
                 new StringGenerator(() => Guid.NewGuid().ToString().Substring(8, 3))
             );
-            Fixture.Customizations.Add(
-                new RandomNumericSequenceGenerator(1, 9999999)
+            fixture.Customizations.Add(
+                new RandomNumericSequenceGenerator(1, 99999999)
             );
         }
 
         public Message Generate()
         {
-            return ToMessage(Fixture.Create<T>());
+            return ToMessage(fixture.Create<T>());
         }
 
         protected Message ToMessage(T obj)

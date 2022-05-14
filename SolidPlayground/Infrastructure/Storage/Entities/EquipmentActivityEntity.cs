@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SolidPlayground.Storage.Entities
+namespace Infrastructure.Storage.Entities
 {
     public class EquipmentActivityEntity
     {
-        [Key]
+        public long Id { get; set; }
         public long ActivityId { get; set; }
         public string BookingNumber { get; set; }
 
