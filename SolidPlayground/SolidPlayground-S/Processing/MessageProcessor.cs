@@ -28,18 +28,17 @@ namespace SolidPlayground_S.Processing
 
         public async Task HandleMessage(Message message)
         {
-            if (message == null || string.IsNullOrEmpty(message.Body))
+            if (message == null || string.IsNullOrWhiteSpace(message.Body))
             {
                 logger.LogError("Invalid message received");
                 return;
             }
 
-            string body = message.Body;
-
+            
             // equipment activities
-            if (body.Contains("ActivityId"))
+            if (message.Body.Contains("ActivityId"))
             {
-                EquipmentActivity equipment = JsonSerializer.Deserialize<EquipmentActivity>(body);
+                EquipmentActivity? equipment = JsonSerializer.Deserialize<EquipmentActivity>(message.Body);
                 if (equipment is not null)
                 {
                     if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))
@@ -63,12 +62,13 @@ namespace SolidPlayground_S.Processing
                 }
             }
             // booking
-            else if (body.Contains("BookingNumber"))
+            else if (message.Body.Contains("BookingNumber"))
             {
-                Booking booking = JsonSerializer.Deserialize<Booking>(body);
+                Booking? booking = JsonSerializer.Deserialize<Booking>(message.Body);
                 if (booking is null)
                 {
                     logger.LogError("Invalid booking received");
+                    return;
                 }
 
                 if (await bookingEventRepository.Exists(booking.BookingNumber))

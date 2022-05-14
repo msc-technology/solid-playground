@@ -22,18 +22,17 @@ namespace SolidPlayground_O.Processing
 
         public async Task HandleMessage(Message message)
         {
-            if (message == null || string.IsNullOrEmpty(message.Body))
+            if (message == null || string.IsNullOrWhiteSpace(message.Body))
             {
                 logger.LogError("Invalid message received");
                 return;
             }
 
-            string body = message.Body;
-
-            Booking booking = JsonSerializer.Deserialize<Booking>(body);
+            Booking? booking = JsonSerializer.Deserialize<Booking>(message.Body);
             if (booking is null)
             {
                 logger.LogError("Invalid booking received");
+                return;
             }
 
             if (await BookingExists(booking.BookingNumber))

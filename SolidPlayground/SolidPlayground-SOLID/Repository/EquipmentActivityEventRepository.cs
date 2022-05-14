@@ -22,7 +22,7 @@ namespace SolidPlayground_SOLID.Repository
         {
             if (message is null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(message));
             }
 
             using (var db = new StorageContext())

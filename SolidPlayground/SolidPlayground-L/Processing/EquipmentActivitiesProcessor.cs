@@ -28,61 +28,40 @@ namespace SolidPlayground_L.Processing
 
         public async Task HandleMessage(Message message)
         {
-            if (message == null)
+            if (message == null || string.IsNullOrWhiteSpace(message.Body))
             {
                 logger.LogError("Invalid message received");
                 return;
             }
 
-            string body = message.Body;
-            if (string.IsNullOrEmpty(body))
+            EquipmentActivity? equipment = JsonSerializer.Deserialize<EquipmentActivity>(message.Body);
+            if (equipment is not null)
             {
-                logger.LogError("Invalid message received");
-                return;
-            }
-
-            // equipment activities
-            if (body.Contains("ActivityId"))
-            {
-                EquipmentActivity equipment = JsonSerializer.Deserialize<EquipmentActivity>(body);
-                if (equipment is not null)
+                if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))
                 {
-                    if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))
+                    var isBookingFound = await bookingEventRepository.Exists(equipment.BookingNumber);
+                    logger.LogInformation("Booking: {@BookingNumber} in equipment message {@Found}", equipment.BookingNumber,(equipment.BookingNumber is null ? "not found" : "exists"));
+                    if (isBookingFound)
                     {
-                        var isBookingFound = await bookingEventRepository.Exists(equipment.BookingNumber);
-                        logger.LogInformation("Booking: {@BookingNumber} in equipment message {@Found}", equipment.BookingNumber,(equipment.BookingNumber is null ? "not found" : "exists"));
-                        if (isBookingFound)
-                        {
-                            await publisher.Send(equipment);
-                            logger.LogInformation("Equipment activity {@ActivityId} published", equipment.ActivityId);
-                        }
-                        else
-                        {
-                            if (await StoreEquipment(equipment))
-                            {
-                                logger.LogInformation("Stored equipment activity: {@message} with booking number not found", equipment);
-                            }
-                            else
-                            {
-                                logger.LogError("Error while storing equipment activity");
-                            }
-                        }
+                        await publisher.Send(equipment);
+                        logger.LogInformation("Equipment activity {@ActivityId} published", equipment.ActivityId);
                     }
                     else
                     {
-                        logger.LogError("Equipment activity {@ActivityId} with missing booking number", equipment.ActivityId);
+                        if (await StoreEquipment(equipment))
+                        {
+                            logger.LogInformation("Stored equipment activity: {@message} with booking number not found", equipment);
+                        }
+                        else
+                        {
+                            logger.LogError("Error while storing equipment activity");
+                        }
                     }
                 }
-            }
-            // booking
-            else if (body.Contains("BookingNumber"))
-            {
-               
-            }
-            // error
-            else
-            {
-                logger.LogError("Aborting processing for booking");
+                else
+                {
+                    logger.LogError("Equipment activity {@ActivityId} with missing booking number", equipment.ActivityId);
+                }
             }
         }
 

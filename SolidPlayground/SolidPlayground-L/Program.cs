@@ -1,19 +1,26 @@
 ﻿using Core.DTO;
 using MessagesFramework;
+using Microsoft.Extensions.Logging;
 using SolidPlayground_L.Processing;
 
-// See https://aka.ms/new-console-template for more information
+// logging
 var loggerFactory = new Infrastructure.Logging.LogServiceFactory();
 var logger = loggerFactory.CreateLogger<Program>();
-Console.WriteLine("Starting message processor");
 
+// connection
 string connectionString = Environment.GetEnvironmentVariable("connection-string") ?? "local-dev-string";
+var subscription = new Subscription(connectionString);
+
+// processors
 var bookingProcessor = new BookingProcessor();
-var bookingSub = new Subscriber<Booking>(new Subscription(connectionString), bookingProcessor);
-bookingSub.Subscribe();
-
 var equipmentProcessor = new EquipmentActivitiesProcessor();
-var equipSub = new Subscriber<EquipmentActivity>(new Subscription(connectionString), equipmentProcessor);
-equipSub.Subscribe();
 
+// subscribers
+var bookingSub = new Subscriber<Booking>(subscription, bookingProcessor);
+var equipSub = new Subscriber<EquipmentActivity>(subscription, equipmentProcessor);
+
+// run
+logger.LogInformation("Starting message processor");
+bookingSub.Subscribe();
+equipSub.Subscribe();
 Console.ReadLine();

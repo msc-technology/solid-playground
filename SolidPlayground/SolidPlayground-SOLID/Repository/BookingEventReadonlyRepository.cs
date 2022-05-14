@@ -6,6 +6,11 @@ namespace SolidPlayground_SOLID.Repository
     {
         public async Task<bool> Exists(string key)
         {
+            if (key is null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
             using (var db = new StorageContext())
             {
                 var booking = await db.BookingEntity.FindAsync(key);

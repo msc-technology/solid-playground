@@ -3,17 +3,22 @@ using MessagesFramework;
 using Microsoft.Extensions.Logging;
 using SolidPlayground_SpaghettiCode.Processing;
 
-// See https://aka.ms/new-console-template for more information
+// logging
 var loggerFactory = new Infrastructure.Logging.LogServiceFactory();
 var logger = loggerFactory.CreateLogger<Program>();
-logger.LogInformation("Starting message processor");
 
+// connection
 string connectionString = Environment.GetEnvironmentVariable("connection-string") ?? "local-dev-string";
+
+// processors
 var processor = new MessageProcessor();
+
+// subscribers
 var bookingSub = new Subscriber<Booking>(new Subscription(connectionString), processor);
-bookingSub.Subscribe();
-
 var equipSub = new Subscriber<EquipmentActivity>(new Subscription(connectionString), processor);
-equipSub.Subscribe();
 
+// run
+logger.LogInformation("Starting message processor");
+bookingSub.Subscribe();
+equipSub.Subscribe();
 Console.ReadLine();

@@ -22,33 +22,25 @@ namespace SolidPlayground_SOLID.Processing
 
         public async Task HandleMessage(Message message)
         {
-            if (message == null || string.IsNullOrEmpty(message.Body))
+            try
             {
-                logger.LogError("Invalid message received");
-                return;
-            }
+                Booking? booking = JsonSerializer.Deserialize<Booking>(message.Body);
+                if (await bookingEventRepository.Exists(booking.BookingNumber))
+                {
+                    logger.LogInformation("Booking {@BookingNumber} was already stored", booking.BookingNumber);
+                    return;
+                }
 
-            string body = message.Body;
-
-            Booking booking = JsonSerializer.Deserialize<Booking>(body);
-            if (booking is null)
-            {
-                logger.LogError("Invalid booking received");
-            }
-
-            if (await bookingEventRepository.Exists(booking.BookingNumber))
-            {
-                logger.LogInformation("Booking {@BookingNumber} was already stored", booking.BookingNumber);
-                return;
-            }
-
-            if (!await bookingEventRepository.Store(booking))
-            {
-                logger.LogError("Error while storing Booking {@BookingNumber}", booking.BookingNumber);
-            }
-            else
-            {
+                await bookingEventRepository.Store(booking);
                 logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
+            } 
+            catch (ArgumentNullException ex)
+            {
+                logger.LogError("Invalid argument {@ex}", ex);
+            } 
+            catch (JsonException ex)
+            {
+                logger.LogError("Invalid json {@ex}", ex);
             }
         }
     }

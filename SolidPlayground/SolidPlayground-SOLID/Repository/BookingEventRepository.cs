@@ -10,7 +10,7 @@ namespace SolidPlayground_SOLID.Repository
         {
             if (booking is null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(booking));
             }
 
             using (var db = new StorageContext())
