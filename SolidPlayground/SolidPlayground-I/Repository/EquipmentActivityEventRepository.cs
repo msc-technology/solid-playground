@@ -14,6 +14,7 @@ namespace SolidPlayground_I.Repository
         {
             BookingEventReadonlyRepository = new BookingEventReadonlyRepository();
         }
+
         public async Task<bool> BookingExists(string key)
         {
             Console.WriteLine("check booking");

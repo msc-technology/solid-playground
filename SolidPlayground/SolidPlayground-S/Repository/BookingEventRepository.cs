@@ -31,14 +31,9 @@ namespace SolidPlayground_S.Repository
 
             using (var db = new StorageContext())
             {
-                var isBookingStored = await Exists(message.BookingNumber);
-                if (!isBookingStored)
-                {
-                    await db.BookingEntity.AddAsync(new BookingEntity(message.BookingNumber));
-                    db.SaveChanges();
-                    return true;
-                }
-                return false;
+                await db.BookingEntity.AddAsync(new BookingEntity(message.BookingNumber));
+                db.SaveChanges();
+                return true;
             }
         }
     }

@@ -29,22 +29,26 @@ namespace SolidPlayground_O.Processing
             }
 
             string body = message.Body;
-           
+
             Booking booking = JsonSerializer.Deserialize<Booking>(body);
-            if (booking is not null)
+            if (booking is null)
             {
-                if (!await StoreBooking(booking))
-                {
-                    logger.LogInformation("Booking {@BookingNumber} was already stored", booking.BookingNumber);
-                }
-                else
-                {
-                    logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
-                }
+                logger.LogError("Invalid booking received");
+            }
+
+            if (await BookingExists(booking.BookingNumber))
+            {
+                logger.LogInformation("Booking {@BookingNumber} was already stored", booking.BookingNumber);
+                return;
+            }
+
+            if (!await StoreBooking(booking))
+            {
+                logger.LogError("Error while storing Booking {@BookingNumber}", booking.BookingNumber);
             }
             else
             {
-                logger.LogError("Invalid booking received");
+                logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
             }
         }
 

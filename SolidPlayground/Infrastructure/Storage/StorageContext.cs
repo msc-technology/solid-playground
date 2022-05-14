@@ -30,7 +30,7 @@ namespace Infrastructure.Storage
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BookingEntity>().ToTable("BookingEntity");
-            modelBuilder.Entity<EquipmentActivityEntity>().ToTable("EquipmentActivity");
+            modelBuilder.Entity<EquipmentActivityEntity>().ToTable("EquipmentActivity").HasKey(e => e.Id);
         }
     }
 }
