@@ -1,8 +1,8 @@
-﻿using MessagesFramework;
-using Core.DTO;
+﻿using Core.DTO;
+using MessagesFramework;
+using Microsoft.Extensions.Logging;
 using SolidPlayground_D.Repository;
 using System.Text.Json;
-using Microsoft.Extensions.Logging;
 
 namespace SolidPlayground_D.Processing
 {
@@ -78,14 +78,8 @@ namespace SolidPlayground_D.Processing
                     return;
                 }
 
-                if (!await bookingEventRepository.Store(booking))
-                {
-                    logger.LogError("Error while storing Booking {@BookingNumber}", booking.BookingNumber);
-                }
-                else
-                {
-                    logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
-                }
+                await bookingEventRepository.Store(booking);
+                logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
             }
             // error
             else

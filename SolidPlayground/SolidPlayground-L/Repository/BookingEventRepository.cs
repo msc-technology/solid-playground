@@ -10,23 +10,12 @@ namespace SolidPlayground_L.Repository
     // then some methods would have to be reimplemented to do nothing or throw an exception to allow the class to respect "readonly" requirement
     public class BookingEventRepository : BookingEventReadonlyRepository
     {
-        public async Task<bool> Store(Booking? message)
+        public async Task Store(Booking? message)
         {
-            if (message == null || message.BookingNumber == null)
-            {
-                return false;
-            }
-
             using (var db = new StorageContext())
             {
-                var isBookingStored = await Exists(message.BookingNumber);
-                if (!isBookingStored)
-                {
-                    await db.BookingEntity.AddAsync(new BookingEntity(message.BookingNumber));
-                    db.SaveChanges();
-                    return true;
-                }
-                return false;
+                await db.BookingEntity.AddAsync(new BookingEntity(message.BookingNumber));
+                db.SaveChanges();
             }
         }
     }

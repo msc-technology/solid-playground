@@ -27,18 +27,12 @@ namespace SolidPlayground_S.Repository
             }
         }
 
-        public async Task<bool> Store(EquipmentActivity? message)
+        public async Task Store(EquipmentActivity? message)
         {
-            if (message is null)
-            {
-                return false;
-            }
-
             using (var db = new StorageContext())
             {
                 await db.EquipmentActivity.AddAsync(new EquipmentActivityEntity(message.ActivityId, message.BookingNumber));
                 db.SaveChanges();
-                return true;
             }
         }
     }

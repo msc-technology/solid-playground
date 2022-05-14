@@ -42,14 +42,8 @@ namespace SolidPlayground_I.Processing
                 return;
             }
 
-            if (!await BookingEventRepository.Store(booking))
-            {
-                logger.LogError("Error while storing Booking {@BookingNumber}", booking.BookingNumber);
-            }
-            else
-            {
-                logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
-            }
+            await BookingEventRepository.Store(booking);
+            logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
         }
     }
 }

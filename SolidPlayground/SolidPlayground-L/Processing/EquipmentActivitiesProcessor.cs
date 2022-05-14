@@ -48,14 +48,8 @@ namespace SolidPlayground_L.Processing
                     }
                     else
                     {
-                        if (await StoreEquipment(equipment))
-                        {
-                            logger.LogInformation("Stored equipment activity: {@message} with booking number not found", equipment);
-                        }
-                        else
-                        {
-                            logger.LogError("Error while storing equipment activity");
-                        }
+                        await StoreEquipment(equipment);
+                        logger.LogInformation("Stored equipment activity: {@message} with booking number not found", equipment);
                     }
                 }
                 else
@@ -66,18 +60,12 @@ namespace SolidPlayground_L.Processing
         }
 
         // db methods
-        private async Task<bool> StoreEquipment(EquipmentActivity message)
+        private async Task StoreEquipment(EquipmentActivity message)
         {
-            if (message is null)
-            {
-                return false;
-            }
-
             using (var db = new StorageContext())
             {
                 await db.EquipmentActivity.AddAsync(new EquipmentActivityEntity(message.ActivityId, message.BookingNumber));
                 db.SaveChanges();
-                return true;
             }
         }
     }

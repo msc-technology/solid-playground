@@ -41,31 +41,16 @@ namespace SolidPlayground_O.Processing
                 return;
             }
 
-            if (!await StoreBooking(booking))
-            {
-                logger.LogError("Error while storing Booking {@BookingNumber}", booking.BookingNumber);
-            }
-            else
-            {
-                logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
-            }
+            await StoreBooking(booking);
+            logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
         }
 
-        private async Task<bool> StoreBooking(Booking message)
+        private async Task StoreBooking(Booking message)
         {
             using (var db = new StorageContext())
             {
-                var isBookingStored = await BookingExists(message.BookingNumber);
-                if (isBookingStored)
-                {
-                    return false;
-                }
-                else
-                {
-                    await db.BookingEntity.AddAsync(new BookingEntity(message.BookingNumber));
-                    db.SaveChanges();
-                    return true;
-                }
+                await db.BookingEntity.AddAsync(new BookingEntity(message.BookingNumber));
+                db.SaveChanges();
             }
         }
 

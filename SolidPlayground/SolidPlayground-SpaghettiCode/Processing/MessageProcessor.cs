@@ -50,14 +50,8 @@ namespace SolidPlayground_SpaghettiCode.Processing
                         }
                         else
                         {
-                            if (await StoreEquipment(equipment))
-                            {
-                                logger.LogInformation("Stored equipment activity: {@message} with booking number not found", equipment);
-                            }
-                            else
-                            {
-                                logger.LogError("Error while storing equipment activity");
-                            }
+                            await StoreEquipment(equipment);
+                            logger.LogInformation("Stored equipment activity: {@message} with booking number not found", equipment);
                         }
                     }
                     else
@@ -81,14 +75,8 @@ namespace SolidPlayground_SpaghettiCode.Processing
                     return;
                 }
 
-                if (!await StoreBooking(booking))
-                {
-                    logger.LogError("Error while storing Booking {@BookingNumber}", booking.BookingNumber);
-                }
-                else
-                {
-                    logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
-                }
+                await StoreBooking(booking);
+                logger.LogInformation("Stored booking: {@BookingNumber}", booking.BookingNumber);
             }
             // error
             else
@@ -98,18 +86,12 @@ namespace SolidPlayground_SpaghettiCode.Processing
         }
 
         // db methods
-        private async Task<bool> StoreBooking(Booking message)
+        private async Task StoreBooking(Booking message)
         {
             using (var db = new StorageContext())
             {
-                if (message is null)
-                {
-                    return false;
-                }
-
                 await db.BookingEntity.AddAsync(new BookingEntity(message.BookingNumber));
                 db.SaveChanges();
-                return true;
             }
         }
 
@@ -122,18 +104,12 @@ namespace SolidPlayground_SpaghettiCode.Processing
             }
         }
 
-        private async Task<bool> StoreEquipment(EquipmentActivity message)
+        private async Task StoreEquipment(EquipmentActivity message)
         {
-            if (message is null)
-            {
-                return false;
-            }
-
             using (var db = new StorageContext())
             {
                 await db.EquipmentActivity.AddAsync(new EquipmentActivityEntity(message.ActivityId, message.BookingNumber));
                 db.SaveChanges();
-                return true;
             }
         }
     }

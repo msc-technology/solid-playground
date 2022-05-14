@@ -22,18 +22,12 @@ namespace SolidPlayground_D.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<bool> Store(Booking? message)
+        public async Task Store(Booking? message)
         {
-            if (message == null || message.BookingNumber == null)
-            {
-                return false;
-            }
-
             using (var db = new StorageContext())
             {
                 await db.BookingEntity.AddAsync(new BookingEntity(message.BookingNumber));
                 db.SaveChanges();
-                return true;
             }
         }
     }
