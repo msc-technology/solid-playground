@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolidPlayground", "SolidPla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolidPlayground-S", "SolidPlayground-S\SolidPlayground-S.csproj", "{568FC10A-A050-4D80-AA53-92D28428E3EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidPlayground-O", "SolidPlayground-O\SolidPlayground-O.csproj", "{38818D4F-0868-4EA2-946A-0D6C3FBFEAD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidPlayground-L", "SolidPlayground-L\SolidPlayground-L.csproj", "{DD1FB766-3C40-423E-B185-1DF24801D570}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{568FC10A-A050-4D80-AA53-92D28428E3EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{568FC10A-A050-4D80-AA53-92D28428E3EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{568FC10A-A050-4D80-AA53-92D28428E3EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38818D4F-0868-4EA2-946A-0D6C3FBFEAD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38818D4F-0868-4EA2-946A-0D6C3FBFEAD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38818D4F-0868-4EA2-946A-0D6C3FBFEAD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38818D4F-0868-4EA2-946A-0D6C3FBFEAD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD1FB766-3C40-423E-B185-1DF24801D570}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD1FB766-3C40-423E-B185-1DF24801D570}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD1FB766-3C40-423E-B185-1DF24801D570}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD1FB766-3C40-423E-B185-1DF24801D570}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
