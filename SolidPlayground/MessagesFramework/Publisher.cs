@@ -1,6 +1,6 @@
 ﻿namespace MessagesFramework
 {
-    public class Publisher<T>
+    public class Publisher<T> : IPublisher<T>
     {
         Subscription Subscription;
 

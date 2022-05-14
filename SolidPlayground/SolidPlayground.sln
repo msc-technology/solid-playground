@@ -13,13 +13,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolidPlayground", "SolidPla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolidPlayground-S", "SolidPlayground-S\SolidPlayground-S.csproj", "{568FC10A-A050-4D80-AA53-92D28428E3EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidPlayground-O", "SolidPlayground-O\SolidPlayground-O.csproj", "{38818D4F-0868-4EA2-946A-0D6C3FBFEAD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolidPlayground-O", "SolidPlayground-O\SolidPlayground-O.csproj", "{38818D4F-0868-4EA2-946A-0D6C3FBFEAD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidPlayground-L", "SolidPlayground-L\SolidPlayground-L.csproj", "{DD1FB766-3C40-423E-B185-1DF24801D570}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolidPlayground-L", "SolidPlayground-L\SolidPlayground-L.csproj", "{DD1FB766-3C40-423E-B185-1DF24801D570}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidPlayground-I", "SolidPlayground-I\SolidPlayground-I.csproj", "{33EC9B56-BBC8-47D6-9AE1-5907CAFF9F65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolidPlayground-I", "SolidPlayground-I\SolidPlayground-I.csproj", "{33EC9B56-BBC8-47D6-9AE1-5907CAFF9F65}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{6CB6EDBE-FAEA-41BE-B1AB-9BF8CCA68111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidPlayground-D", "SolidPlayground-D\SolidPlayground-D.csproj", "{041812E3-2F0C-4AAD-976A-3D37727BCD1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidPlayground-SOLID", "SolidPlayground-SOLID\SolidPlayground-SOLID.csproj", "{D2A3B9C6-98A1-4564-87A2-7AB66A2137CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +67,14 @@ Global
 		{6CB6EDBE-FAEA-41BE-B1AB-9BF8CCA68111}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CB6EDBE-FAEA-41BE-B1AB-9BF8CCA68111}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CB6EDBE-FAEA-41BE-B1AB-9BF8CCA68111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{041812E3-2F0C-4AAD-976A-3D37727BCD1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{041812E3-2F0C-4AAD-976A-3D37727BCD1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{041812E3-2F0C-4AAD-976A-3D37727BCD1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{041812E3-2F0C-4AAD-976A-3D37727BCD1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A3B9C6-98A1-4564-87A2-7AB66A2137CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A3B9C6-98A1-4564-87A2-7AB66A2137CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A3B9C6-98A1-4564-87A2-7AB66A2137CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A3B9C6-98A1-4564-87A2-7AB66A2137CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

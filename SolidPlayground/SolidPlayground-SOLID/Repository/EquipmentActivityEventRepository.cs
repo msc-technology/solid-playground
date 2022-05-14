@@ -2,17 +2,15 @@
 using Infrastructure.Storage;
 using Infrastructure.Storage.Entities;
 
-namespace SolidPlayground_I.Repository
+namespace SolidPlayground_SOLID.Repository
 {
-    // Applies:
-    // I: Interface segregation
-    public class EquipmentActivityEventRepository : IEquipmentActivityRepository
+    public class EquipmentActivityEventRepository : IEquipmentActivityEventRepository
     {
-        private readonly BookingEventReadonlyRepository bookingEventReadonlyRepository;
+        private readonly IBookingEventReadonlyRepository bookingEventReadonlyRepository;
 
-        public EquipmentActivityEventRepository()
+        public EquipmentActivityEventRepository(IBookingEventReadonlyRepository bookingReadonlyRepository)
         {
-            bookingEventReadonlyRepository = new BookingEventReadonlyRepository();
+            bookingEventReadonlyRepository = bookingReadonlyRepository;
         }
 
         public async Task<bool> BookingExists(string key)
