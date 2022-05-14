@@ -18,7 +18,7 @@ namespace SolidPlayground_SOLID.Repository
             return await bookingEventReadonlyRepository.Exists(key);
         }
 
-        public async Task<bool> Store(EquipmentActivity? message)
+        public async Task Store(EquipmentActivity? message)
         {
             if (message is null)
             {
@@ -29,7 +29,6 @@ namespace SolidPlayground_SOLID.Repository
             {
                 await db.EquipmentActivity.AddAsync(new EquipmentActivityEntity(message.ActivityId, message.BookingNumber));
                 db.SaveChanges();
-                return true;
             }
         }
     }

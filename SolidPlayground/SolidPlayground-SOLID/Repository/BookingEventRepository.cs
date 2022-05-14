@@ -6,7 +6,7 @@ namespace SolidPlayground_SOLID.Repository
 {
     public class BookingEventRepository : BookingEventReadonlyRepository, IBookingEventRepository
     {
-        public async Task<bool> Store(Booking booking)
+        public async Task Store(Booking booking)
         {
             if (booking is null)
             {
@@ -17,7 +17,6 @@ namespace SolidPlayground_SOLID.Repository
             {
                 await db.AddAsync(new BookingEntity(booking.BookingNumber));
                 await db.SaveChangesAsync();
-                return true;
             }
         }
     }

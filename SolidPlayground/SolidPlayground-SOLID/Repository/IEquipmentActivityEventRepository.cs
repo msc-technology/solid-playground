@@ -5,6 +5,6 @@ namespace SolidPlayground_SOLID.Repository
     public interface IEquipmentActivityEventRepository
     {
         Task<bool> BookingExists(string key);
-        Task<bool> Store(EquipmentActivity equipmentActivity);
+        Task Store(EquipmentActivity equipmentActivity);
     }
 }
