@@ -6,7 +6,7 @@ namespace SolidPlayground_I.Repository
 {
     // Applies:
     // I: Interface segregation
-    public class EquipmentActivityEventRepository : IEquipmentActivityRepository
+    public class EquipmentActivityEventRepository : IEquipmentActivityEventRepository
     {
         private readonly BookingEventReadonlyRepository bookingEventReadonlyRepository;
 

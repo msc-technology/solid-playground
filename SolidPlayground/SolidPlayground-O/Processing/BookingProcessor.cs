@@ -11,6 +11,7 @@ namespace SolidPlayground_O.Processing
     public class BookingProcessor : IMessageHandler
     {
         // Violates:
+        // S: Single responsability
         // D: Dipendency Inversion
         private readonly ILogger logger;
 
