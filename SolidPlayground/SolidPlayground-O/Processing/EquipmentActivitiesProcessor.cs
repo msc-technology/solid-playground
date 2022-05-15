@@ -11,6 +11,7 @@ namespace SolidPlayground_O.Processing
     public class EquipmentActivitiesProcessor : IMessageHandler
     {
         // Violates:
+        // S: Single responsability
         // D: Dipendency Inversion
         private readonly Publisher<EquipmentActivity> publisher;
         private readonly ILogger logger;

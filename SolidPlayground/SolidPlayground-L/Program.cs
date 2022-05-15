@@ -12,12 +12,11 @@ string connectionString = Environment.GetEnvironmentVariable("connection-string"
 var subscription = new Subscription(connectionString);
 
 // processors
-var bookingProcessor = new BookingProcessor();
-var equipmentProcessor = new EquipmentActivitiesProcessor();
+var processor = new MessageProcessor();
 
 // subscribers
-var bookingSub = new Subscriber<Booking>(subscription, bookingProcessor);
-var equipSub = new Subscriber<EquipmentActivity>(subscription, equipmentProcessor);
+var bookingSub = new Subscriber<Booking>(subscription, processor);
+var equipSub = new Subscriber<EquipmentActivity>(subscription, processor);
 
 // run
 logger.LogInformation("Starting message processor");

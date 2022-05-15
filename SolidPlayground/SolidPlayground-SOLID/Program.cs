@@ -10,8 +10,7 @@ var logger = loggerFactory.CreateLogger<Program>();
 
 // repositories
 var bookingRepository = new BookingEventRepository();
-var bookingReadonlyRepository = new BookingEventReadonlyRepository();
-var equipmentRepository = new EquipmentActivityEventRepository(bookingReadonlyRepository);
+var equipmentRepository = new EquipmentActivityEventRepository(bookingRepository);
 
 // connection and publishing
 string connectionString = Environment.GetEnvironmentVariable("connection-string") ?? "local-dev-string";

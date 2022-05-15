@@ -2,9 +2,8 @@
 
 namespace SolidPlayground_SOLID.Repository
 {
-    public interface IBookingEventRepository
+    public interface IBookingEventRepository : IBookingEventReadonlyRepository
     {
-        Task<bool> Exists(string key);
         Task Store(Booking booking);
     }
 }
