@@ -3,8 +3,8 @@ using MessagesFramework;
 using Microsoft.Extensions.Logging;
 using Infrastructure.Storage;
 using Infrastructure.Storage.Entities;
-using System.Text.Json;
 using Infrastructure.Logging;
+using Infrastructure.Helper;
 
 namespace SolidPlayground_O.Processing
 {
@@ -13,10 +13,12 @@ namespace SolidPlayground_O.Processing
         // Violates:
         // S: Single responsability
         // D: Dipendency Inversion
+        private readonly JsonHelper jsonHelper;
         private readonly ILogger logger;
 
         public BookingProcessor()
         {
+            jsonHelper = new JsonHelper();
             var loggerFactory = new LogServiceFactory();
             logger = loggerFactory.CreateLogger<BookingProcessor>();
         }
@@ -29,7 +31,7 @@ namespace SolidPlayground_O.Processing
                 return;
             }
 
-            Booking? booking = JsonSerializer.Deserialize<Booking>(message.Body);
+            Booking? booking = jsonHelper.Deserialize<Booking>(message.Body);
             if (booking is null)
             {
                 logger.LogError("Invalid booking received");

@@ -1,9 +1,9 @@
 ﻿using MessagesFramework;
 using Core.DTO;
 using SolidPlayground_S.Repository;
-using System.Text.Json;
 using Infrastructure.Logging;
 using Microsoft.Extensions.Logging;
+using Infrastructure.Helper;
 
 namespace SolidPlayground_S.Processing
 {
@@ -13,17 +13,19 @@ namespace SolidPlayground_S.Processing
         // O: Open for change, closed to modification
         // D: Dipendency Inversion
         private readonly Publisher<EquipmentActivity> publisher;
-        private readonly ILogger logger;
         private readonly BookingEventRepository bookingEventRepository;
         private readonly EquipmentActivityEventRepository equipmentActivityEventStorage;
+        private readonly JsonHelper jsonHelper;
+        private readonly ILogger logger;
 
         public MessageProcessor()
         {
             var publisherConnString = Environment.GetEnvironmentVariable("pub-connection-string") ?? "local-dev-string";
             publisher = new Publisher<EquipmentActivity>(new Subscription(publisherConnString));
-            logger = new LogServiceFactory().CreateLogger<MessageProcessor>();
+            jsonHelper = new JsonHelper();
             bookingEventRepository = new BookingEventRepository();
             equipmentActivityEventStorage = new EquipmentActivityEventRepository();
+            logger = new LogServiceFactory().CreateLogger<MessageProcessor>();
         }
 
         public async Task HandleMessage(Message message)
@@ -38,7 +40,7 @@ namespace SolidPlayground_S.Processing
             // equipment activities
             if (message.Body.Contains("ActivityId"))
             {
-                EquipmentActivity? equipment = JsonSerializer.Deserialize<EquipmentActivity>(message.Body);
+                EquipmentActivity? equipment = jsonHelper.Deserialize<EquipmentActivity>(message.Body);
                 if (equipment is not null)
                 {
                     if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))
@@ -64,7 +66,7 @@ namespace SolidPlayground_S.Processing
             // booking
             else if (message.Body.Contains("BookingNumber"))
             {
-                Booking? booking = JsonSerializer.Deserialize<Booking>(message.Body);
+                Booking? booking = jsonHelper.Deserialize<Booking>(message.Body);
                 if (booking is null)
                 {
                     logger.LogError("Invalid booking received");

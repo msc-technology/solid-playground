@@ -1,9 +1,9 @@
 ﻿using Core.DTO;
 using MessagesFramework;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 using Infrastructure.Logging;
 using SolidPlayground_I.Repository;
+using Infrastructure.Helper;
 
 namespace SolidPlayground_I.Processing
 {
@@ -15,6 +15,7 @@ namespace SolidPlayground_I.Processing
         private readonly Publisher<EquipmentActivity> publisher;
         private readonly BookingEventRepository bookingEventRepository;
         private readonly EquipmentActivityEventRepository equipmentActivityEventRepository;
+        private readonly IJsonHelper jsonHelper;
         private readonly ILogger logger;
 
         public MessageProcessor()
@@ -23,6 +24,7 @@ namespace SolidPlayground_I.Processing
             publisher = new Publisher<EquipmentActivity>(new Subscription(publisherConnString));
             bookingEventRepository = new BookingEventRepository();
             equipmentActivityEventRepository = new EquipmentActivityEventRepository();
+            jsonHelper = new JsonHelper();
             var loggerFactory = new LogServiceFactory();
             logger = loggerFactory.CreateLogger<MessageProcessor>();
         }
@@ -38,7 +40,7 @@ namespace SolidPlayground_I.Processing
             // equipment activities
             if (message.Body.Contains("ActivityId"))
             {
-                EquipmentActivity? equipment = JsonSerializer.Deserialize<EquipmentActivity>(message.Body);
+                EquipmentActivity? equipment = jsonHelper.Deserialize<EquipmentActivity>(message.Body);
                 if (equipment is not null)
                 {
                     if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))
@@ -65,7 +67,7 @@ namespace SolidPlayground_I.Processing
             // booking
             else if (message.Body.Contains("BookingNumber"))
             {
-                Booking? booking = JsonSerializer.Deserialize<Booking>(message.Body);
+                Booking? booking = jsonHelper.Deserialize<Booking>(message.Body);
                 if (booking is null)
                 {
                     logger.LogError("Invalid booking received");

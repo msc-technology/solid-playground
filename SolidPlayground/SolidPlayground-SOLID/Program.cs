@@ -1,4 +1,5 @@
 ﻿using Core.DTO;
+using Infrastructure.Helper;
 using MessagesFramework;
 using Microsoft.Extensions.Logging;
 using SolidPlayground_SOLID.Processing;
@@ -17,9 +18,16 @@ string connectionString = Environment.GetEnvironmentVariable("connection-string"
 var subscription = new Subscription(connectionString);
 var publisher = new Publisher<EquipmentActivity>(subscription);
 
+// helpers
+var jsonHelper = new JsonHelper();
+
 // processors
-var bookingProcessor = new BookingProcessor(bookingRepository, logger);
-var equipmentProcessor = new EquipmentActivitiesProcessor(publisher, equipmentRepository, logger);
+var bookingProcessor = new ProcessorDecorator(
+    new BookingProcessor(bookingRepository, jsonHelper, logger)
+    , logger);
+var equipmentProcessor = new ProcessorDecorator(
+    new EquipmentActivitiesProcessor(publisher, equipmentRepository, jsonHelper, logger)
+    , logger);
 
 // subscribers
 var bookingSub = new Subscriber<Booking>(subscription, bookingProcessor);

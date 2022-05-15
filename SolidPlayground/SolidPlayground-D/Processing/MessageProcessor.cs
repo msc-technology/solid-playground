@@ -1,8 +1,8 @@
 ﻿using Core.DTO;
+using Infrastructure.Helper;
 using MessagesFramework;
 using Microsoft.Extensions.Logging;
 using SolidPlayground_D.Repository;
-using System.Text.Json;
 
 namespace SolidPlayground_D.Processing
 {
@@ -13,18 +13,21 @@ namespace SolidPlayground_D.Processing
         private readonly IPublisher<EquipmentActivity> publisher;
         private readonly IRepository<Booking?> bookingEventRepository;
         private readonly IRepository<EquipmentActivity?> equipmentActivityEventStorage;
+        private readonly IJsonHelper jsonHelper;
         private readonly ILogger logger;
 
         public MessageProcessor(
             IPublisher<EquipmentActivity> iPublisher,
             IRepository<Booking?> iBookingRepository,
             IRepository<EquipmentActivity?> iEquipmentActivityRepository,
+            IJsonHelper ijsonHelper,
             ILogger iLogger
         )
         {
             publisher = iPublisher;
             bookingEventRepository = iBookingRepository;
             equipmentActivityEventStorage = iEquipmentActivityRepository;
+            jsonHelper = ijsonHelper;
             logger = iLogger;
         }
 
@@ -39,7 +42,7 @@ namespace SolidPlayground_D.Processing
             // equipment activities
             if (message.Body.Contains("ActivityId"))
             {
-                EquipmentActivity? equipment = JsonSerializer.Deserialize<EquipmentActivity>(message.Body);
+                EquipmentActivity? equipment = jsonHelper.Deserialize<EquipmentActivity>(message.Body);
                 if (equipment is not null)
                 {
                     if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))
@@ -65,7 +68,7 @@ namespace SolidPlayground_D.Processing
             // booking
             else if (message.Body.Contains("BookingNumber"))
             {
-                Booking? booking = JsonSerializer.Deserialize<Booking>(message.Body);
+                Booking? booking = jsonHelper.Deserialize<Booking>(message.Body);
                 if (booking is null)
                 {
                     logger.LogError("Invalid booking received");
