@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Infrastructure.Logging;
 using Infrastructure.Storage;
 using Infrastructure.Storage.Entities;
-using System.Text.Json;
+using Infrastructure.Helper;
 
 namespace SolidPlayground_O.Processing
 {
@@ -14,14 +14,16 @@ namespace SolidPlayground_O.Processing
         // S: Single responsability
         // D: Dipendency Inversion
         private readonly Publisher<EquipmentActivity> publisher;
+        private readonly JsonHelper jsonHelper;
         private readonly ILogger logger;
 
         public EquipmentActivitiesProcessor()
         {
-            var loggerFactory = new LogServiceFactory();
-            logger = loggerFactory.CreateLogger<EquipmentActivitiesProcessor>();
             var publisherConnString = Environment.GetEnvironmentVariable("pub-connection-string") ?? "local-dev-string";
             publisher = new Publisher<EquipmentActivity>(new Subscription(publisherConnString));
+            jsonHelper = new JsonHelper();
+            var loggerFactory = new LogServiceFactory();
+            logger = loggerFactory.CreateLogger<EquipmentActivitiesProcessor>();
         }
 
         public async Task HandleMessage(Message message)
@@ -32,7 +34,7 @@ namespace SolidPlayground_O.Processing
                 return;
             }
 
-            EquipmentActivity? equipment = JsonSerializer.Deserialize<EquipmentActivity>(message.Body);
+            EquipmentActivity? equipment = jsonHelper.Deserialize<EquipmentActivity>(message.Body);
             if (equipment is not null)
             {
                 if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))

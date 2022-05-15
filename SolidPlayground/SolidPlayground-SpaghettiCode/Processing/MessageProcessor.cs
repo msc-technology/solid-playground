@@ -3,8 +3,8 @@ using MessagesFramework;
 using Microsoft.Extensions.Logging;
 using Infrastructure.Storage;
 using Infrastructure.Storage.Entities;
-using System.Text.Json;
 using Infrastructure.Logging;
+using Infrastructure.Helper;
 
 namespace SolidPlayground_SpaghettiCode.Processing
 {
@@ -15,12 +15,14 @@ namespace SolidPlayground_SpaghettiCode.Processing
         // O: Open for change, closed to modification
         // D: Dipendency Inversion
         private readonly Publisher<EquipmentActivity> publisher;
+        private readonly JsonHelper jsonHelper;
         private readonly ILogger logger;
 
         public MessageProcessor()
         {
             var publisherConnString = Environment.GetEnvironmentVariable("pub-connection-string") ?? "local-dev-string";
             publisher = new Publisher<EquipmentActivity>(new Subscription(publisherConnString));
+            jsonHelper = new JsonHelper();
             var loggerFactory = new LogServiceFactory();
             logger = loggerFactory.CreateLogger<MessageProcessor>();
         }
@@ -36,7 +38,7 @@ namespace SolidPlayground_SpaghettiCode.Processing
             // equipment activities
             if (message.Body.Contains("ActivityId"))
             {
-                EquipmentActivity? equipment = JsonSerializer.Deserialize<EquipmentActivity>(message.Body);
+                EquipmentActivity? equipment = jsonHelper.Deserialize<EquipmentActivity>(message.Body);
                 if (equipment is not null)
                 {
                     if (!string.IsNullOrWhiteSpace(equipment.BookingNumber))
@@ -63,7 +65,7 @@ namespace SolidPlayground_SpaghettiCode.Processing
             // booking
             else if (message.Body.Contains("BookingNumber"))
             {
-                Booking? booking = JsonSerializer.Deserialize<Booking>(message.Body);
+                Booking? booking = jsonHelper.Deserialize<Booking>(message.Body);
                 if (booking is null)
                 {
                     logger.LogError("Invalid booking received");
