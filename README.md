@@ -1,4 +1,4 @@
-# How to write SOLID code
+# SOLID Playground
 
 The way to design and write understandable, flexible, and maintainable code is rough. SOLID is the best way to reduce complexity and save ourselves a lot of headaches as our applications grow in size and functionalities.
 
@@ -43,4 +43,4 @@ SolidPlayground solution is composed by many projects. They can be split into ca
 
 ## Contributing
 
-See [Contributing](https://github.com/msc-technology/tech-speeches/blob/main/CONTRIBUTING.md) for information, guidelines, and making pull requests to contribute to this repository.
+See [Contributing](https://github.com/msc-technology/.github/blob/main/CONTRIBUTING.md) for information, guidelines, and making pull requests to contribute to this repository.
