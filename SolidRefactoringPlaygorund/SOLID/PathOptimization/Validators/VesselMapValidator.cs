@@ -26,8 +26,8 @@ namespace PathOptimization.Validators
 
         public void ValidatePathCoordinates(Coordinate start, Coordinate target)
         {
-            PathValidator.WithMap(Map).ValidatePathCoordinates(start, target); 
-            
+            PathValidator.WithMap(Map).ValidatePathCoordinates(start, target);
+
             if (!IsMapValueValid(start))
             {
                 throw new ArgumentException("Cannot resolve path because start coordinate is not accessibile");

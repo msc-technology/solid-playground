@@ -22,7 +22,7 @@ namespace PathOptimization.Validators
             {
                 throw new ArgumentException("Cannot resolve path because start coordinate is out of bounds");
             }
-            
+
             if (Map.IsCoordinateOutOfRange(target))
             {
                 throw new ArgumentException("Cannot resolve path because target coordinate is out of bounds");

@@ -18,8 +18,8 @@ namespace PathOptimization.PathFinders
         {
             Validator.ValidatePathCoordinates(start, target);
 
-            Coordinate step = new (start.X, start.Y);
-            List<Coordinate> result = new() { new (step.X, step.Y) };
+            Coordinate step = new(start.X, start.Y);
+            List<Coordinate> result = new() { new(step.X, step.Y) };
 
             while (step != target)
             {
@@ -40,7 +40,7 @@ namespace PathOptimization.PathFinders
                     convenientSteps.First() :
                     convenientSteps.First(coord => Map.GetValueAtCoordinate(coord) == maxValueAtConvenientSteps);
 
-                result.Add(new (step.X, step.Y));
+                result.Add(new(step.X, step.Y));
             }
 
             return result;

@@ -14,7 +14,7 @@ namespace PathOptimization.PathFinders
         public IEnumerable<Coordinate> Find(Coordinate start, Coordinate target, string vehicle)
         {
             Coordinate step = new(start.X, start.Y);
-            List<Coordinate> result = new() { new (step.X, step.Y) };
+            List<Coordinate> result = new() { new(step.X, step.Y) };
 
             while (step != target)
             {

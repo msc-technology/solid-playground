@@ -1,5 +1,5 @@
-using PathOptimization.Factories;
 using PathOptimization;
+using PathOptimization.Factories;
 using PathOptimization.Validators;
 
 var builder = WebApplication.CreateBuilder(args);

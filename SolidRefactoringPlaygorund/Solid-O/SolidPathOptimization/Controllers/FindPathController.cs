@@ -31,7 +31,7 @@ namespace SolidPathOptimization.Controllers
             var pathFinder = PathFinderFactory.Create("plane", pathFindingRequest.Map);
             return ComputePath(pathFinder, pathFindingRequest);
         }
-        
+
         [HttpPost("Vessel")]
         public ObjectResult Vessel([FromBody] PathFindingRequest pathFindingRequest)
         {
@@ -45,8 +45,8 @@ namespace SolidPathOptimization.Controllers
             return ComputePath(pathFinder, pathFindingRequest);
         }
 
-        private ObjectResult ComputePath(PathFinder pathFinder, PathFindingRequest pathFindingRequest) 
-        { 
+        private ObjectResult ComputePath(PathFinder pathFinder, PathFindingRequest pathFindingRequest)
+        {
             try
             {
                 pathFinder.ValidateInputCoordinates(pathFindingRequest.Start, pathFindingRequest.Target);

@@ -1,6 +1,5 @@
 ﻿using PathOptimization.PathFinders;
 using PathOptimization.Registry;
-using System.ComponentModel;
 
 namespace PathOptimization.Factories
 {

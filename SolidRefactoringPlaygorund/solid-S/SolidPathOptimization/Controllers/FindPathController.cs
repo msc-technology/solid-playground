@@ -28,7 +28,7 @@ namespace SolidPathOptimization.Controllers
             var pathFinder = new PathFinder(pathFindingRequest.Map);
             return ComputePath(pathFinder, pathFindingRequest, "plane");
         }
-        
+
         [HttpPost("Vessel")]
         public ObjectResult Vessel([FromBody] PathFindingRequest pathFindingRequest)
         {
@@ -42,8 +42,8 @@ namespace SolidPathOptimization.Controllers
             return ComputePath(pathFinder, pathFindingRequest, "vessel");
         }
 
-        private ObjectResult ComputePath(PathFinder pathFinder, PathFindingRequest pathFindingRequest, string vehicle) 
-        { 
+        private ObjectResult ComputePath(PathFinder pathFinder, PathFindingRequest pathFindingRequest, string vehicle)
+        {
             try
             {
                 var path = pathFinder.Find(pathFindingRequest.Start, pathFindingRequest.Target, vehicle);

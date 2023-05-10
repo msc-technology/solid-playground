@@ -38,7 +38,7 @@ namespace SolidPathOptimization.Controllers
                 Logger.LogError("Bad request");
                 return BadRequest("Bad request");
             }
-            
+
             IPathFinder? pathFinder = PathFinderFactory.Create(vehicle, pathFindingRequest?.Map!);
             if (pathFinder is null)
             {

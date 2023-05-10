@@ -6,7 +6,7 @@ namespace PathOptimization.Factories
     {
         public PathFinder? Create(IEnumerable<int[]> map)
         {
-            return map is null ? 
+            return map is null ?
                 null :
                 new PathFinder(map);
         }
