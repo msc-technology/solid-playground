@@ -5,7 +5,7 @@ namespace PathOptimization.Validators
 {
     public class PathValidator : IPathValidator, IWithMap<IPathValidator>
     {
-        protected IEnumerable<int[]> Map { get; set; }
+        protected IEnumerable<int[]> Map { get; set; } = null!;
 
         public void ValidatePathCoordinates(Coordinate start, Coordinate target)
         {
