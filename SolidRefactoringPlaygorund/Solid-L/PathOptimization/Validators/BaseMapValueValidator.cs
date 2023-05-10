@@ -1,9 +1,4 @@
 ﻿using PathOptimization.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PathOptimization.Validators
 {
@@ -32,6 +27,11 @@ namespace PathOptimization.Validators
             {
                 throw new ArgumentException("Cannot resolve path because target coordinate is out of bounds");
             }
+        }
+
+        public virtual bool IsStepValid(Coordinate point)
+        {
+            return true;
         }
     }
 }

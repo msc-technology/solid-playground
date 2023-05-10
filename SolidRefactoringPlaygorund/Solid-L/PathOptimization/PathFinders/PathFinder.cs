@@ -6,6 +6,7 @@ namespace PathOptimization.PathFinders
     public class PathFinder
     {
         protected IEnumerable<int[]> Map { get; }
+        private BaseMapValueValidator MapValueValidator { get; set; }
 
         public PathFinder(IEnumerable<int[]> map)
         {
@@ -19,9 +20,9 @@ namespace PathOptimization.PathFinders
 
             while (step != target)
             {
-                IEnumerable<Coordinate> availableSteps = GetAvailableSteps(step, vehicle)
-                    .Where(x => !result.Contains(x))
-                    .ToList();
+                IEnumerable<Coordinate> availableSteps = GetAvailableSteps(step)
+                    .Where(x => !result.Contains(x));
+
                 if (!availableSteps.Any())
                 {
                     throw new InvalidOperationException("Cannot resolve path");
@@ -47,19 +48,20 @@ namespace PathOptimization.PathFinders
             switch (vehicle)
             {
                 case "vessel":
-                    new VesselMapValueValidator(Map).ValidateInputCoordinate(start, target);
+                    MapValueValidator = new VesselMapValueValidator(Map);
                     break;
 
                 case "plane":
-                    new BaseMapValueValidator(Map).ValidateInputCoordinate(start, target);
+                    MapValueValidator = new BaseMapValueValidator(Map);
                     break;
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(vehicle));
             }
+            MapValueValidator.ValidateInputCoordinate(start, target);
         }
 
-        private IEnumerable<Coordinate> GetAvailableSteps(Coordinate point, string vehicle)
+        private IEnumerable<Coordinate> GetAvailableSteps(Coordinate point)
         {
             List<Coordinate> nextSteps = new();
             if (point.Y - 1 >= 0)
@@ -79,12 +81,7 @@ namespace PathOptimization.PathFinders
                 nextSteps.Add(new Coordinate(point.X + 1, point.Y));
             }
 
-            return vehicle switch
-            {
-                "vessel" => nextSteps.Where(coord => Map.GetValueAtCoordinate(coord) > 0).ToArray(),
-                "plane" => nextSteps.ToArray(),
-                _ => throw new ArgumentOutOfRangeException(nameof(vehicle)),
-            };
+            return nextSteps.Where(x => MapValueValidator.IsStepValid(x));
         }
     }
 }

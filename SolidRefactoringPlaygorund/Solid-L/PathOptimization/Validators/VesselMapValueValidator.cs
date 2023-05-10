@@ -22,5 +22,10 @@ namespace PathOptimization.Validators
                 throw new ArgumentException("Cannot resolve path because target coordinate is not accessibile");
             }
         }
+
+        public override bool IsStepValid(Coordinate point)
+        {
+            return Map.GetValueAtCoordinate(point) > 0;
+        }
     }
 }
