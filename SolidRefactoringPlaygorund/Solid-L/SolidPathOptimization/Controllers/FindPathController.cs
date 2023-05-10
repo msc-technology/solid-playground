@@ -47,7 +47,7 @@ namespace SolidPathOptimization.Controllers
             try
             {
                 pathFinder.ValidateInputCoordinates(pathFindingRequest.Start, pathFindingRequest.Target, vehicle);
-                var path = pathFinder.Find(pathFindingRequest.Start, pathFindingRequest.Target, vehicle);
+                var path = pathFinder.Find(pathFindingRequest.Start, pathFindingRequest.Target);
                 Logger.LogInformation("Path finding completed {Path}", path);
                 return Ok(JsonSerializer.Serialize(path));
             }

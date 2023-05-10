@@ -6,14 +6,14 @@ namespace PathOptimization.PathFinders
     public class PathFinder
     {
         protected IEnumerable<int[]> Map { get; }
-        private BaseMapValueValidator MapValueValidator { get; set; }
+        private BaseMapValueValidator MapValueValidator { get; set; } = null!;
 
         public PathFinder(IEnumerable<int[]> map)
         {
             Map = map;
         }
 
-        public IEnumerable<Coordinate> Find(Coordinate start, Coordinate target, string vehicle)
+        public IEnumerable<Coordinate> Find(Coordinate start, Coordinate target)
         {
             Coordinate step = new (start.X, start.Y);
             List<Coordinate> result = new() { new (step.X, step.Y) };

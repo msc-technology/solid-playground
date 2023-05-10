@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PathOptimization.Factories;
+using PathOptimization;
 using PathOptimization.PathFinders;
 using SolidPathOptimization.Models;
 using System.Text.Json;
@@ -11,9 +11,9 @@ namespace SolidPathOptimization.Controllers
     public class FindPathController : ControllerBase
     {
         private ILogger<FindPathController> Logger { get; }
-        private PathFinderFactory PathFinderFactory { get; }
+        private IPathFinderFactory PathFinderFactory { get; }
 
-        public FindPathController(ILogger<FindPathController> logger, PathFinderFactory pathFinderFactory)
+        public FindPathController(ILogger<FindPathController> logger, IPathFinderFactory pathFinderFactory)
         {
             Logger = logger;
             PathFinderFactory = pathFinderFactory;

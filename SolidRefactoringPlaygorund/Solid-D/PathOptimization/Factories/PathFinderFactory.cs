@@ -2,9 +2,9 @@
 
 namespace PathOptimization.Factories
 {
-    public class PathFinderFactory
+    public class PathFinderFactory : IPathFinderFactory
     {
-        public static PathFinder? Create(IEnumerable<int[]> map)
+        public PathFinder? Create(IEnumerable<int[]> map)
         {
             return map is null ? 
                 null :

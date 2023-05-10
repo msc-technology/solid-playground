@@ -58,5 +58,17 @@ namespace PathOptimization.Validators
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        public bool IsStepValid(Coordinate point, string vehicle)
+        {
+            switch (vehicle)
+            {
+                case "vessel":
+                    return Map.GetValueAtCoordinate(point) > 0;
+                case "plane":
+                    return true;
+                default: throw new ArgumentOutOfRangeException(nameof(vehicle));
+            }
+        }
     }
 }

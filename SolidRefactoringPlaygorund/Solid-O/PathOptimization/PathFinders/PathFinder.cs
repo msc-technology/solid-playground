@@ -68,7 +68,7 @@ namespace PathOptimization.PathFinders
                 nextSteps.Add(new Coordinate(point.X + 1, point.Y));
             }
 
-            return nextSteps.Where(Validator.IsMapValueValid).ToArray();
+            return nextSteps.Where(coord => Validator.IsMapValueValid(coord)).ToArray();
         }
     }
 }

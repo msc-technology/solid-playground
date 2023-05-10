@@ -1,5 +1,4 @@
 ﻿using PathOptimization.Extensions;
-using System.Diagnostics;
 
 namespace PathOptimization.PathFinders
 {

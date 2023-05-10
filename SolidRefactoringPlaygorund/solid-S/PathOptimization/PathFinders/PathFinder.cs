@@ -66,14 +66,7 @@ namespace PathOptimization.PathFinders
                 nextSteps.Add(new Coordinate(point.X + 1, point.Y));
             }
 
-            switch (vehicle)
-            {
-                case "vessel":
-                    return nextSteps.Where(coord => Map.GetValueAtCoordinate(coord) > 0).ToArray();
-                case "plane":
-                    return nextSteps.ToArray();
-                default: throw new ArgumentOutOfRangeException();
-            }
+            return nextSteps.Where(coord => Validator.IsStepValid(coord, vehicle));
         }
     }
 }
